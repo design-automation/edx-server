@@ -11,9 +11,7 @@ import requests
 log = logging.getLogger(__name__)
 
 QUEUE_NAME = settings.QUEUE_NAME
-
-URL = "https://roz4vh2l98.execute-api.us-east-1.amazonaws.com/alpha0"
-
+LAMBDA_URL = project_urls.LAMBDA_URL
 
 def each_cycle():
     print('[*]Logging in to xqueue')
@@ -49,7 +47,7 @@ def grade(content):
     count = 0
     comment = ''
     for (filename, fileurl) in files.iteritems():
-        r = requests.post(url = URL, data = json.dumps({ "file" : fileurl}))
+        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}))
         response = r.json()
         print(response)
         if response['correct']:
