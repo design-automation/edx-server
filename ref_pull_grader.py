@@ -54,8 +54,6 @@ def grade(content):
     print("submitted by email: " + email)
     files = json.loads(content['xqueue_files'])
 
-    aws_authenticate()
-
     auth = AWSRequestsAuth(aws_access_key= KEY,
                     aws_secret_access_key= SEC,
                     aws_host= settings.IAM['aws_host'],
