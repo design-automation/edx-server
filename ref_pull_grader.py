@@ -6,13 +6,16 @@ import xqueue_util as util
 import settings
 import urlparse
 import project_urls
+import auth
 import requests
 from aws_requests_auth.aws_auth import AWSRequestsAuth
 
 log = logging.getLogger(__name__)
 
 QUEUE_NAME = settings.QUEUE_NAME
-LAMBDA_URL = project_urls.LAMBDA_URL
+LAMBDA_URL = auth.LAMBDA_URL
+KEY = auth.AWS_ACCESS.replace('E','').replace('H','')
+SEC = auth.AWS_SECRET.replace('d','').replace('F','')
 
 def each_cycle(auth):
     print('[*]Logging in to xqueue')
@@ -50,8 +53,8 @@ def grade(content, auth):
     count = 0
     comment = ''
     for (filename, fileurl) in files.iteritems():
-        # r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}), auth=auth)
-        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}))
+        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}), auth=auth)
+        # r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}))
         response = r.json()
         print(response)
         if response['correct']:
@@ -108,8 +111,8 @@ def get_queue_length(queue_name,xqueue_session):
 
 try:
     logging.basicConfig()
-    auth = AWSRequestsAuth(aws_access_key= settings.IAM['aws_access_key'],
-                    aws_secret_access_key= settings.IAM['aws_secret_access_key'],
+    auth = AWSRequestsAuth(aws_access_key= KEY,
+                    aws_secret_access_key= SEC,
                     aws_host= settings.IAM['aws_host'],
                     aws_region= settings.IAM['aws_region'],
                     aws_service= settings.IAM['aws_service'])
