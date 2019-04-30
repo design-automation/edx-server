@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 QUEUE_NAME = settings.QUEUE_NAME
 LAMBDA_URL = project_urls.LAMBDA_URL
 
-def each_cycle():
+def each_cycle(auth):
     print('[*]Logging in to xqueue')
     session = util.xqueue_login()
     success_length, queue_length = get_queue_length(QUEUE_NAME, session)
@@ -25,7 +25,7 @@ def each_cycle():
         success_parse, content = util.parse_xobject(queue_item, QUEUE_NAME)
         if success_get and success_parse:
             try:
-                correct, score, comment = grade(content)
+                correct, score, comment = grade(content, auth)
             except Exception:
                 correct, score, comment =  False, 0, '<p>UNEXPECTED ERROR</p>'
             print('correct: ', correct,'score: ', score, 'comment: ', comment)
@@ -39,7 +39,7 @@ def each_cycle():
 
 
 
-def grade(content):
+def grade(content, auth):
     body = json.loads(content['xqueue_body'])
     student_info = json.loads(body.get('student_info', '{}'))
     email = student_info.get('student_email', '')
@@ -49,13 +49,9 @@ def grade(content):
     score = None
     count = 0
     comment = ''
-    auth = AWSRequestsAuth(aws_access_key= settings.IAM['aws_access_key'],
-                        aws_secret_access_key= settings.IAM['aws_secret_access_key'],
-                        aws_host= settings.IAM['aws_host'],
-                        aws_region= settings.IAM['aws_region'],
-                        aws_service= settings.IAM['aws_service'])
     for (filename, fileurl) in files.iteritems():
-        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}), auth=auth)
+        # r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}), auth=auth)
+        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}))
         response = r.json()
         print(response)
         if response['correct']:
@@ -112,8 +108,13 @@ def get_queue_length(queue_name,xqueue_session):
 
 try:
     logging.basicConfig()
+    auth = AWSRequestsAuth(aws_access_key= settings.IAM['aws_access_key'],
+                    aws_secret_access_key= settings.IAM['aws_secret_access_key'],
+                    aws_host= settings.IAM['aws_host'],
+                    aws_region= settings.IAM['aws_region'],
+                    aws_service= settings.IAM['aws_service'])
     while True:
-        each_cycle()
+        each_cycle(auth)
         time.sleep(2)
 except KeyboardInterrupt:
     print '^C received, shutting down'
