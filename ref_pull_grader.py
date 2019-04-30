@@ -7,6 +7,7 @@ import settings
 import urlparse
 import project_urls
 import requests
+from aws_requests_auth.aws_auth import AWSRequestsAuth
 
 log = logging.getLogger(__name__)
 
@@ -17,14 +18,16 @@ def each_cycle():
     print('[*]Logging in to xqueue')
     session = util.xqueue_login()
     success_length, queue_length = get_queue_length(QUEUE_NAME, session)
-    print('success_length:', success_length, ', queue_length:', queue_length)
+    print('Get queue successfully:', success_length, ', number of queues:', queue_length)
     if success_length and queue_length > 0:
         success_get, queue_item = get_from_queue(QUEUE_NAME, session)
         # print(queue_item)
-        print('success_get:', success_get, ', queue_item:', queue_item)
         success_parse, content = util.parse_xobject(queue_item, QUEUE_NAME)
         if success_get and success_parse:
-            correct, score, comment = grade(content)
+            try:
+                correct, score, comment = grade(content)
+            except Exception:
+                correct, score, comment =  False, 0, '<p>UNEXPECTED ERROR</p>'
             print('correct: ', correct,'score: ', score, 'comment: ', comment)
             content_header = json.loads(content['xqueue_header'])
             content_body = json.loads(content['xqueue_body'])
@@ -46,10 +49,14 @@ def grade(content):
     score = None
     count = 0
     comment = ''
+    auth = AWSRequestsAuth(aws_access_key= settings.IAM['aws_access_key'],
+                        aws_secret_access_key= settings.IAM['aws_secret_access_key'],
+                        aws_host= settings.IAM['aws_host'],
+                        aws_region= settings.IAM['aws_region'],
+                        aws_service= settings.IAM['aws_service'])
     for (filename, fileurl) in files.iteritems():
-        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}))
+        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}), auth=auth)
         response = r.json()
-        print(response)
         if response['correct']:
             comment += '<p>file: ' + filename + ': correct</p>'
         else: 
@@ -62,10 +69,6 @@ def grade(content):
         count += 1
 
         r.close()
-        # with open(filename, 'w') as f:
-        #     f.write(response.read())
-        # f.close()
-        # response.close()
     score /= count
     if score > 0:
         success = True
