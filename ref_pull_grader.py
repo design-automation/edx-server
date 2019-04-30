@@ -51,7 +51,6 @@ def grade(content):
     body = json.loads(content['xqueue_body'])
     student_info = json.loads(body.get('student_info', '{}'))
     email = student_info.get('student_email', '')
-    print("submitted by email: " + email)
     files = json.loads(content['xqueue_files'])
 
     auth = AWSRequestsAuth(aws_access_key= KEY,
