@@ -17,7 +17,7 @@ LAMBDA_URL = auth.LAMBDA_URL
 KEY = auth.AWS_ACCESS.replace('E','').replace('H','')
 SEC = auth.AWS_SECRET.replace('d','').replace('F','')
 
-def each_cycle(auth):
+def each_cycle():
     print('[*]Logging in to xqueue')
     session = util.xqueue_login()
     success_length, queue_length = get_queue_length(QUEUE_NAME, session)
@@ -28,7 +28,7 @@ def each_cycle(auth):
         success_parse, content = util.parse_xobject(queue_item, QUEUE_NAME)
         if success_get and success_parse:
             try:
-                correct, score, comment = grade(content, auth)
+                correct, score, comment = grade(content)
             except Exception:
                 correct, score, comment =  False, 0, '<p>UNEXPECTED ERROR</p>'
             print('correct: ', correct,'score: ', score, 'comment: ', comment)
@@ -42,12 +42,18 @@ def each_cycle(auth):
 
 
 
-def grade(content, auth):
+def grade(content):
     body = json.loads(content['xqueue_body'])
     student_info = json.loads(body.get('student_info', '{}'))
     email = student_info.get('student_email', '')
     print("submitted by email: " + email)
     files = json.loads(content['xqueue_files'])
+
+    auth = AWSRequestsAuth(aws_access_key= KEY,
+                    aws_secret_access_key= SEC,
+                    aws_host= settings.IAM['aws_host'],
+                    aws_region= settings.IAM['aws_region'],
+                    aws_service= settings.IAM['aws_service'])
 
     score = None
     count = 0
@@ -111,13 +117,8 @@ def get_queue_length(queue_name,xqueue_session):
 
 try:
     logging.basicConfig()
-    auth = AWSRequestsAuth(aws_access_key= KEY,
-                    aws_secret_access_key= SEC,
-                    aws_host= settings.IAM['aws_host'],
-                    aws_region= settings.IAM['aws_region'],
-                    aws_service= settings.IAM['aws_service'])
     while True:
-        each_cycle(auth)
+        each_cycle()
         time.sleep(2)
 except KeyboardInterrupt:
     print '^C received, shutting down'
