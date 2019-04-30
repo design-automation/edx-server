@@ -89,7 +89,19 @@ def grade(content):
 def aws_authenticate():
     boto3.setup_default_session(region_name=settings.IAM['aws_region'])
     client = boto3.client('apigateway')
-    print(client.get_api_key())
+    response = client.create_api_key(
+        name='test_user_from_boto',
+        description='This is the description',
+        enabled=True,
+        generateDistinctId=True,
+        value='',
+        stageKeys=[{
+            'restApiId':'aaa',
+            'stageName':'beta'
+        }]
+    )
+
+    print(response)
 
 
 def get_from_queue(queue_name,xqueue_session):
