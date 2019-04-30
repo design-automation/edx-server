@@ -14,9 +14,12 @@ import boto3
 log = logging.getLogger(__name__)
 
 QUEUE_NAME = settings.QUEUE_NAME
-LAMBDA_URL = auth.LAMBDA_URL
+LAMBDA_URL = project_urls.LAMBDA_URL
+
+#####################################################
 KEY = auth.AWS_ACCESS.replace('E','').replace('H','')
 SEC = auth.AWS_SECRET.replace('d','').replace('F','')
+#####################################################
 
 def each_cycle():
     print('[*]Logging in to xqueue')
@@ -85,23 +88,6 @@ def grade(content):
     else: 
         success = False
     return success, score, comment
-
-def aws_authenticate():
-    boto3.setup_default_session(region_name=settings.IAM['aws_region'])
-    client = boto3.client('apigateway')
-    response = client.create_usage_plan_key(
-        name='test_user_from_boto',
-        description='This is the description',
-        enabled=True,
-        generateDistinctId=True,
-        value='',
-        stageKeys=[{
-            'restApiId':'aaa',
-            'stageName':'beta'
-        }]
-    )
-
-    print(response)
 
 
 def get_from_queue(queue_name,xqueue_session):
