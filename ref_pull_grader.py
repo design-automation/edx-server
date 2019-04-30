@@ -9,6 +9,7 @@ import project_urls
 import auth
 import requests
 from aws_requests_auth.aws_auth import AWSRequestsAuth
+import boto3
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +50,8 @@ def grade(content):
     print("submitted by email: " + email)
     files = json.loads(content['xqueue_files'])
 
+    aws_authenticate()
+
     auth = AWSRequestsAuth(aws_access_key= KEY,
                     aws_secret_access_key= SEC,
                     aws_host= settings.IAM['aws_host'],
@@ -81,6 +84,12 @@ def grade(content):
     else: 
         success = False
     return success, score, comment
+
+def aws_authenticate():
+    boto3.setup_default_session(region_name=settings.IAM['aws_region'])
+    client = boto3.client('apigateway')
+    print(client)
+
 
 def get_from_queue(queue_name,xqueue_session):
     """
