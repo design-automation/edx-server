@@ -89,7 +89,7 @@ def grade(content):
 def aws_authenticate():
     boto3.setup_default_session(region_name=settings.IAM['aws_region'])
     client = boto3.client('apigateway')
-    response = client.create_api_key(
+    response = client.create_usage_plan_key(
         name='test_user_from_boto',
         description='This is the description',
         enabled=True,
