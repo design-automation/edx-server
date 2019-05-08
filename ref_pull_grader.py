@@ -17,8 +17,8 @@ QUEUE_NAME = settings.QUEUE_NAME
 LAMBDA_URL = project_urls.LAMBDA_URL
 
 #####################################################
-KEY = auth.AWS_ACCESS.replace('E','').replace('H','')
-SEC = auth.AWS_SECRET.replace('d','').replace('F','')
+KEY = auth.AWS_ACCESS1 + auth.AWS_ACCESS4
+SEC = auth.AWS_ACCESS0 + auth.AWS_ACCESS2 + auth.AWS_ACCESS5
 #####################################################
 
 def each_cycle():
