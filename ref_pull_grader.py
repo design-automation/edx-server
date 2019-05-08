@@ -18,7 +18,7 @@ LAMBDA_URL = project_urls.LAMBDA_URL
 
 #####################################################
 KEY = auth.AWS_ACCESS1 + auth.AWS_ACCESS4
-SEC = auth.AWS_ACCESS0 + auth.AWS_ACCESS2 + auth.AWS_ACCESS5
+SEC = auth.AWS_ACCESS5 + auth.AWS_ACCESS0 + auth.AWS_ACCESS2
 #####################################################
 
 def each_cycle():
