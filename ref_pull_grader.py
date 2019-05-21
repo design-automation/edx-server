@@ -65,13 +65,12 @@ def grade(content):
     count = 0
     comment = ''
     for (filename, fileurl) in files.iteritems():
-        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}), auth=auth)
+        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl, "question" : question}), auth=auth)
         # r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}))
         response = r.json()
         print(response)
         if response['correct']:
             comment += '<p>file: ' + filename + ': correct</p>'
-            comment += '<p>Question: ' + question + '</p>'
         else: 
             comment += '<p><emph>file: ' + filename + ': error</emph></p>'
 
