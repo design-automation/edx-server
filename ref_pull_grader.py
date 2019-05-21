@@ -52,7 +52,9 @@ def grade(content):
     student_info = json.loads(body.get('student_info', '{}'))
     email = student_info.get('student_email', '')
     files = json.loads(content['xqueue_files'])
-
+    grader_payload = json.loads(body.get('grader_payload', '{}'))
+    question = grader_payload.get('question', '')
+    
     auth = AWSRequestsAuth(aws_access_key= KEY,
                     aws_secret_access_key= SEC,
                     aws_host= settings.IAM['aws_host'],
@@ -69,6 +71,7 @@ def grade(content):
         print(response)
         if response['correct']:
             comment += '<p>file: ' + filename + ': correct</p>'
+            comment += '<p>Question: ' + question + '</p>'
         else: 
             comment += '<p><emph>file: ' + filename + ': error</emph></p>'
 
