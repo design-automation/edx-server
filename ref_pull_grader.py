@@ -71,10 +71,10 @@ def grade(content):
         print(response)
         if response['correct']:
             comment += '<p>File: ' + filename + ': correct</p>'
-            comment += '<p>Comment: 'response['comment'] + '</p>'
+            comment += '<p>Comment: ' + response['comment'] + '</p>'
         else: 
             comment += '<p><emph>file: ' + filename + ': error</emph></p>'
-            comment += '<p>Comment: 'response['comment'] + '</p>'
+            comment += '<p>Comment: ' + response['comment'] + '</p>'
             
         if not score:
             score = response['score']
