@@ -35,7 +35,7 @@ def each_cycle():
                 correct, score, comment = grade(content)
             except Exception as ex:
                 print(ex)
-                correct, score, comment =  False, 0, '<p>UNEXPECTED ERROR</p>'
+                correct, score, comment =  False, 0, '<p>SERVER UNEXPECTED ERROR</p>'
             print('correct: ', correct,'score: ', score, 'comment: ', comment)
             content_header = json.loads(content['xqueue_header'])
             content_body = json.loads(content['xqueue_body'])
