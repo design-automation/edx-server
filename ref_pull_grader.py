@@ -55,6 +55,20 @@ def grade(content):
     grader_payload = json.loads(body.get('grader_payload', '{}'))
     question = grader_payload.get('question', '')
     
+    try:
+        sts_client = boto3.client('sts')
+
+        # Call the assume_role method of the STSConnection object and pass the role
+        # ARN and a role session name.
+        assumed_role_object=sts_client.assume_role(
+            RoleArn="arn:aws:iam::114056409474:role/Edx_server-Lambda_and_API_gateway_access",
+            RoleSessionName="grading_session"
+        )
+        print('role credentials:', assumed_role_object['Credentials'])
+        print('role:', assumed_role_object)
+    except Exception as ex:
+        print(ex)
+
     auth = AWSRequestsAuth(aws_access_key= KEY,
                     aws_secret_access_key= SEC,
                     aws_host= settings.IAM['aws_host'],
@@ -130,4 +144,4 @@ try:
         each_cycle()
         time.sleep(2)
 except KeyboardInterrupt:
-    print '^C received, shutting down'
+    print('^C received, shutting down')
