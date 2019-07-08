@@ -63,7 +63,7 @@ def grade(content):
         assumed_role_object = sts_client.assume_role(
             RoleArn="arn:aws:iam::114056409474:role/Edx_server-Lambda_and_API_gateway_access",
             RoleSessionName="gradingSession1",
-            DurationSeconds=300
+            DurationSeconds=900
         )
         credentials = assumed_role_object['Credentials']
         print(credentials)
