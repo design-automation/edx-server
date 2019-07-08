@@ -60,12 +60,12 @@ def grade(content):
 
         # Call the assume_role method of the STSConnection object and pass the role
         # ARN and a role session name.
-        assumed_role_object=sts_client.assume_role(
+        assumed_role_object = sts_client.assume_role(
             RoleArn="arn:aws:iam::114056409474:role/Edx_server-Lambda_and_API_gateway_access",
-            RoleSessionName="grading_session"
+            RoleSessionName="gradingSession1"
         )
-        print('role credentials:', assumed_role_object['Credentials'])
-        print('role:', assumed_role_object)
+        credentials = assumed_role_object['Credentials']
+        print(credentials)
     except Exception as ex:
         print(ex)
 
