@@ -57,12 +57,12 @@ def grade(content):
     
     try:
         lambda_client = boto3.client('lambda')
-        assumed_role_object = lambda_client.assume_role(
-            RoleArn="arn:aws:iam::114056409474:role/Edx_server-Lambda_and_API_gateway_access",
-            RoleSessionName = 'temp'
+        result = lambda_client.invoke(
+            FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader',
+            InvocationType='RequestResponse'
         )
-        credentials = assumed_role_object['Credentials']
-        print(credentials)
+        print(result)
+
     except Exception as ex:
         print(ex)
 
