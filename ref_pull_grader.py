@@ -57,6 +57,7 @@ def grade(content):
     
     try:
         sts_client = boto3.client('sts')
+        print('Default Provider Identity: : ' + sts_client.get_caller_identity()['Arn'])
         assumed_role_object = sts_client.assume_role(
             RoleArn="arn:aws:iam::114056409474:role/Edx_server-Lambda_and_API_gateway_access",
             RoleSessionName = 'temp'
