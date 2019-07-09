@@ -66,7 +66,9 @@ def grade(content):
             )
             print '\n\n result: '
             print result
-            print result['Payload'].read()
+            response = result['Payload'].read()
+            print '\n\n response:'
+            print response
     except Exception as ex:
         print(ex)
 
