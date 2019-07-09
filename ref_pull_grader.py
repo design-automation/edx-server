@@ -54,7 +54,11 @@ def grade(content):
     files = json.loads(content['xqueue_files'])
     grader_payload = json.loads(body.get('grader_payload', '{}'))
     question = grader_payload.get('question', '')
-    
+
+
+    score = None
+    count = 0
+    comment = ''
     try:
         lambda_client = boto3.client('lambda', region_name='us-east-1')
         for (filename, fileurl) in files.iteritems():
@@ -68,6 +72,9 @@ def grade(content):
             print result
             response = result['Payload'].read()
             print '\n\n response:'
+            print response
+            response = json.loads(response)
+            print '\n\n response in json:'
             print response
     except Exception as ex:
         print(ex)
