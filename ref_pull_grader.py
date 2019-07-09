@@ -57,13 +57,9 @@ def grade(content):
     
     try:
         sts_client = boto3.client('sts')
-
-        # Call the assume_role method of the STSConnection object and pass the role
-        # ARN and a role session name.
         assumed_role_object = sts_client.assume_role(
             RoleArn="arn:aws:iam::114056409474:role/Edx_server-Lambda_and_API_gateway_access",
-            RoleSessionName="gradingSession1",
-            DurationSeconds=900
+            RoleSessionName = email
         )
         credentials = assumed_role_object['Credentials']
         print(credentials)
