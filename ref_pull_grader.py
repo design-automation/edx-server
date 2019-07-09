@@ -56,7 +56,7 @@ def grade(content):
     question = grader_payload.get('question', '')
     
     try:
-        lambda_client = boto3.client('lambda')
+        lambda_client = boto3.client('lambda', region_name='us-east-1')
         result = lambda_client.invoke(
             FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader',
             InvocationType='RequestResponse'
