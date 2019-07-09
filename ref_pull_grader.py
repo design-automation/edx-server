@@ -56,7 +56,7 @@ def grade(content):
     question = grader_payload.get('question', '')
     
     try:
-        print('services:',boto3.get_available_services())
+        print('services:',boto3.session.Session.get_available_services())
         sts_client = boto3.client('sts')
         print('\nDefault Provider Identity: : ', sts_client.get_caller_identity())
     except Exception as ex:
