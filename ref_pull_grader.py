@@ -64,8 +64,9 @@ def grade(content):
                 LogType = 'None',
                 Payload = json.dumps({ "file" : fileurl, "question" : question})
             )
-            print('\n\n result: ',result)
-
+            print '\n\n result: '
+            print result
+            print result['Payload']
     except Exception as ex:
         print(ex)
 
