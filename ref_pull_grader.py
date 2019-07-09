@@ -67,6 +67,7 @@ def grade(content):
                     aws_host= settings.IAM['aws_host'],
                     aws_region= settings.IAM['aws_region'],
                     aws_service= settings.IAM['aws_service'])
+    print('auth:', auth)
 
     score = None
     count = 0
