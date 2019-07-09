@@ -56,9 +56,13 @@ def grade(content):
     question = grader_payload.get('question', '')
     
     try:
-        print('services:',boto3.session.Session.get_available_services())
-        sts_client = boto3.client('sts')
-        print('\nDefault Provider Identity: : ', sts_client.get_caller_identity())
+        lambda_client = boto3.client('lambda')
+        assumed_role_object = lambda_client.assume_role(
+            RoleArn="arn:aws:iam::114056409474:role/Edx_server-Lambda_and_API_gateway_access",
+            RoleSessionName = 'temp'
+        )
+        credentials = assumed_role_object['Credentials']
+        print(credentials)
     except Exception as ex:
         print(ex)
 
@@ -67,7 +71,6 @@ def grade(content):
                     aws_host= settings.IAM['aws_host'],
                     aws_region= settings.IAM['aws_region'],
                     aws_service= settings.IAM['aws_service'])
-    print('auth:', auth)
 
     score = None
     count = 0
