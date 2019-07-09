@@ -57,11 +57,14 @@ def grade(content):
     
     try:
         lambda_client = boto3.client('lambda', region_name='us-east-1')
-        result = lambda_client.invoke(
-            FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader',
-            InvocationType='RequestResponse'
-        )
-        print(result)
+        for (filename, fileurl) in files.iteritems():
+            result = lambda_client.invoke(
+                FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader',
+                InvocationType='RequestResponse',
+                LogType = 'None',
+                Payload = json.dumps({ "file" : fileurl, "question" : question})
+            )
+            print(result)
 
     except Exception as ex:
         print(ex)
