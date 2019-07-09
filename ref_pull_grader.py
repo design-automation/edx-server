@@ -59,60 +59,75 @@ def grade(content):
     score = None
     count = 0
     comment = ''
-    try:
-        lambda_client = boto3.client('lambda', region_name='us-east-1')
-        for (filename, fileurl) in files.iteritems():
+    lambda_client = boto3.client('lambda', region_name='us-east-1')
+    for (filename, fileurl) in files.iteritems():
+        try:
             result = lambda_client.invoke(
                 FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader',
                 InvocationType='RequestResponse',
                 LogType = 'None',
                 Payload = json.dumps({ "file" : fileurl, "question" : question})
             )
-            print '\n\n result: '
-            print result
-            response = result['Payload'].read()
-            print '\n\n response:'
-            print response
-            response = json.loads(response)
-            print '\n\n response in json:'
-            print response
-    except Exception as ex:
-        print(ex)
+        except Exception:
+            comment += '<p><emph>File: ' + filename + ': error</emph></p>'
+            comment += '<p>Comment: Grading Error</p>'
+            count += 1
+            continue
 
-    auth = AWSRequestsAuth(aws_access_key= KEY,
-                    aws_secret_access_key= SEC,
-                    aws_host= settings.IAM['aws_host'],
-                    aws_region= settings.IAM['aws_region'],
-                    aws_service= settings.IAM['aws_service'])
-
-    score = None
-    count = 0
-    comment = ''
-    for (filename, fileurl) in files.iteritems():
-        r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl, "question" : question}), auth=auth)
-        # r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}))
-        response = r.json()
-        print(response)
+        response = json.loads(result['Payload'].read())
         if response['correct']:
             comment += '<p>File: ' + filename + ': correct</p>'
             comment += '<p>Comment: ' + "<br />".join(response['comment'].split("\n")) + '</p>'
         else: 
             comment += '<p><emph>File: ' + filename + ': error</emph></p>'
             comment += '<p>Comment: ' + "<br />".join(response['comment'].split("\n")) + '</p>'
-            
         if not score:
             score = response['score']
         else:
             score += response['score']
         count += 1
-
-        r.close()
     score /= count
     if score > 0:
         success = True
     else: 
         success = False
     return success, score, comment
+
+
+    # auth = AWSRequestsAuth(aws_access_key= KEY,
+    #                 aws_secret_access_key= SEC,
+    #                 aws_host= settings.IAM['aws_host'],
+    #                 aws_region= settings.IAM['aws_region'],
+    #                 aws_service= settings.IAM['aws_service'])
+
+    # score = None
+    # count = 0
+    # comment = ''
+    # for (filename, fileurl) in files.iteritems():
+    #     r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl, "question" : question}), auth=auth)
+    #     # r = requests.post(url = LAMBDA_URL, data = json.dumps({ "file" : fileurl}))
+    #     response = r.json()
+    #     print(response)
+    #     if response['correct']:
+    #         comment += '<p>File: ' + filename + ': correct</p>'
+    #         comment += '<p>Comment: ' + "<br />".join(response['comment'].split("\n")) + '</p>'
+    #     else: 
+    #         comment += '<p><emph>File: ' + filename + ': error</emph></p>'
+    #         comment += '<p>Comment: ' + "<br />".join(response['comment'].split("\n")) + '</p>'
+            
+    #     if not score:
+    #         score = response['score']
+    #     else:
+    #         score += response['score']
+    #     count += 1
+
+    #     r.close()
+    # score /= count
+    # if score > 0:
+    #     success = True
+    # else: 
+    #     success = False
+    # return success, score, comment
 
 
 def get_from_queue(queue_name,xqueue_session):
