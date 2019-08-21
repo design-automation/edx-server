@@ -6,20 +6,21 @@ import xqueue_util as util
 import settings
 import urlparse
 import project_urls
-import auth
 import requests
-from aws_requests_auth.aws_auth import AWSRequestsAuth
 import boto3
+
+# import auth
+# from aws_requests_auth.aws_auth import AWSRequestsAuth
+
+#####################################################
+# KEY = auth.AWS_ACCESS1 + auth.AWS_ACCESS4
+# SEC = auth.AWS_ACCESS5 + auth.AWS_ACCESS0 + auth.AWS_ACCESS2
+#####################################################
 
 log = logging.getLogger(__name__)
 
 QUEUE_NAME = settings.QUEUE_NAME
 LAMBDA_URL = project_urls.LAMBDA_URL
-
-#####################################################
-KEY = auth.AWS_ACCESS1 + auth.AWS_ACCESS4
-SEC = auth.AWS_ACCESS5 + auth.AWS_ACCESS0 + auth.AWS_ACCESS2
-#####################################################
 
 def each_cycle():
     print('[*]Logging in to xqueue')
@@ -132,8 +133,8 @@ def grade(content):
 
 def get_from_queue(queue_name,xqueue_session):
     """
-        Get a single submission from xqueue
-        """
+    Get a single submission from xqueue
+    """
     try:
         success, response = util._http_get(xqueue_session,
                                            urlparse.urljoin(settings.XQUEUE_INTERFACE['url'], project_urls.XqueueURLs.get_submission),
@@ -147,8 +148,8 @@ def get_from_queue(queue_name,xqueue_session):
 
 def get_queue_length(queue_name,xqueue_session):
     """
-        Returns the length of the queue
-        """
+    Returns the length of the queue
+    """
     try:
         success, response = util._http_get(xqueue_session,
                                            urlparse.urljoin(settings.XQUEUE_INTERFACE['url'], project_urls.XqueueURLs.get_queuelen),
