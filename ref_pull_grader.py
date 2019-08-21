@@ -67,7 +67,7 @@ def grade(content):
                 FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader',
                 InvocationType='RequestResponse',
                 LogType = 'None',
-                Payload = json.dumps({ "file" : fileurl, "question" : question})
+                Payload = json.dumps({ "file" : fileurl, "question" : question, "info": student_info})
             )
         except Exception:
             comment += '<p><emph>File: ' + filename + ': error</emph></p>'
