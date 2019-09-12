@@ -1,2 +1,2 @@
 echo "start edx pull grader server"
-exec python ref_pull_grader.py
+exec python mobius_server/edx-server/ref_pull_grader.py
