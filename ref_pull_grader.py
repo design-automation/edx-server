@@ -24,7 +24,11 @@ LAMBDA_URL = project_urls.LAMBDA_URL
 
 def each_cycle():
     print('[*]Logging in to xqueue')
-    session = util.xqueue_login()
+    try:
+        session = util.xqueue_login()
+    except Exception as ex:
+        print('Error: Unable to log into XQueue:', ex)
+        return
     success_length, queue_length = get_queue_length(QUEUE_NAME, session)
     print('Get queue successfully:', success_length, ', number of queues:', queue_length)
     if success_length and queue_length > 0:
