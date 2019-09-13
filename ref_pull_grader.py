@@ -94,7 +94,7 @@ def grade(content):
         else:
             score += response['score']
         count += 1
-    score = count
+    score = score / count
     if score > 0:
         success = True
     else: 
@@ -130,7 +130,7 @@ def grade(content):
     #     count += 1
 
     #     r.close()
-    # score = count
+    # score /= count
     # if score > 0:
     #     success = True
     # else: 
