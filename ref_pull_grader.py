@@ -65,7 +65,7 @@ def grade(content):
     question = grader_payload.get('question', '')
 
 
-    score = None
+    score = 0
     count = 0
     comment = ''
     lambda_client = boto3.client('lambda', region_name='us-east-1')
