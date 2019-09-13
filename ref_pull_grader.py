@@ -56,6 +56,7 @@ def each_cycle():
 
 
 def grade(content):
+    print(content)
     body = json.loads(content['xqueue_body'])
     student_info = json.loads(body.get('student_info', '{}'))
     email = student_info.get('student_email', '')
@@ -69,7 +70,6 @@ def grade(content):
     comment = ''
     lambda_client = boto3.client('lambda', region_name='us-east-1')
     for (filename, fileurl) in files.iteritems():
-        print('file:',filename, fileurl)
         try:
             result = lambda_client.invoke(
                 FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader',
@@ -84,7 +84,6 @@ def grade(content):
             continue
 
         response = json.loads(result['Payload'].read())
-        print('response:', response)
         if response['correct']:
             comment += '<p>File: ' + filename + ': correct</p>'
             comment += '<p>Comment: ' + "<br />".join(response['comment'].split("\n")) + '</p>'
