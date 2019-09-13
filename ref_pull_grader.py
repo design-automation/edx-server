@@ -130,7 +130,7 @@ def grade(content):
     #     count += 1
 
     #     r.close()
-    # score /= count
+    # score = count
     # if score > 0:
     #     success = True
     # else: 
