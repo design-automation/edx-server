@@ -9,6 +9,8 @@ import project_urls
 import requests
 import boto3
 
+import traceback
+
 # import auth
 # from aws_requests_auth.aws_auth import AWSRequestsAuth
 
@@ -40,6 +42,7 @@ def each_cycle():
                 correct, score, comment = grade(content)
             except Exception as ex:
                 print(ex)
+                traceback.print_exc()
                 correct, score, comment =  False, 0, '<p>SERVER UNEXPECTED ERROR</p>'
             print('correct: ', correct,'score: ', score, 'comment: ', comment)
             content_header = json.loads(content['xqueue_header'])
