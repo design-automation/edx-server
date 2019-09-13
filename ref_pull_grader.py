@@ -94,7 +94,7 @@ def grade(content):
         else:
             score += response['score']
         count += 1
-    score /= count
+    score = count
     if score > 0:
         success = True
     else: 
