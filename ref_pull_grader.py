@@ -70,6 +70,7 @@ def grade(content):
     comment = ''
     lambda_client = boto3.client('lambda', region_name='us-east-1')
     for (filename, fileurl) in files.iteritems():
+        print(filename, fileurl)
         try:
             result = lambda_client.invoke(
                 FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader',
@@ -77,13 +78,15 @@ def grade(content):
                 LogType = 'None',
                 Payload = json.dumps({ "file" : fileurl, "question" : question, "info": student_info})
             )
-        except Exception:
+        except Exception as ex:
             comment += '<p><emph>File: ' + filename + ': error</emph></p>'
             comment += '<p>Comment: Grading Error</p>'
             count += 1
+            print(ex)
             continue
 
         response = json.loads(result['Payload'].read())
+        print(response)
         if response['correct']:
             comment += '<p>File: ' + filename + ': correct</p>'
             comment += '<p>Comment: ' + "<br />".join(response['comment'].split("\n")) + '</p>'
