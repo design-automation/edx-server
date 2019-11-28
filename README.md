@@ -26,6 +26,7 @@ systemd service allow a server instance to be started the moment an amazon ec2 i
 2. `sudo systemctl stop edx.service` to stop the current edx service.
 3. `sudo systemctl daemon-reload` to reload the service.
 4. `sudo systemctl start edx.service` to start the current edx service again.
+5. `sudo systemctl status edx.service` to check the status of edx service. The status should be "active".
 
 The systemd service utilize 2 files: a systemd service file and a .sh script file. The service file is located in "/lib/systemd/system/edx.service" (to edit the file, right after logging into the SSH console, do `vim ../../lib/systemd/system/edx.service`). the script file is located in "~/mobius_server/edx-server/startEDX.sh" ("/home/ubuntu/edx.service", to edit the file, right after logging into the SSH console, do `vim mobius_server/edx-server/startEDX.sh`). After editing either of these files, the systemd service needs to be updated, restart it as per above (stop edx.service, daemon-reload and start edx.service again).
 

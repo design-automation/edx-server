@@ -6,18 +6,19 @@ import urlparse
 import logging
 import json
 import settings
+import auth
 import project_urls
 
 log = logging.getLogger(__name__)
 
 def xqueue_login():
     session = requests.session()
-    xqueue_login_url = urlparse.urljoin(settings.XQUEUE_INTERFACE['url'], project_urls.XqueueURLs.log_in)
+    xqueue_login_url = urlparse.urljoin(auth.XQUEUE_INTERFACE['url'], project_urls.XqueueURLs.log_in)
     (success, xqueue_msg) = login(
                                   session,
                                   xqueue_login_url,
-                                  settings.XQUEUE_INTERFACE['django_auth']['username'],
-                                  settings.XQUEUE_INTERFACE['django_auth']['password'],
+                                  auth.XQUEUE_INTERFACE['django_auth']['username'],
+                                  auth.XQUEUE_INTERFACE['django_auth']['password'],
                                   )
     
     return session
@@ -193,7 +194,7 @@ def post_results_to_xqueue(session, header, body):
         'xqueue_body': body,
     }
     
-    (success, msg) = _http_post(session, settings.XQUEUE_INTERFACE['url'] + project_urls.XqueueURLs.put_result, request,
+    (success, msg) = _http_post(session, auth.XQUEUE_INTERFACE['url'] + project_urls.XqueueURLs.put_result, request,
                                 settings.REQUESTS_TIMEOUT)
     
     return success, msg

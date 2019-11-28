@@ -8,16 +8,11 @@ import urlparse
 import project_urls
 import requests
 import boto3
+import auth
 
 import traceback
 
-# import auth
-# from aws_requests_auth.aws_auth import AWSRequestsAuth
 
-#####################################################
-# KEY = auth.AWS_ACCESS1 + auth.AWS_ACCESS4
-# SEC = auth.AWS_ACCESS5 + auth.AWS_ACCESS0 + auth.AWS_ACCESS2
-#####################################################
 
 log = logging.getLogger(__name__)
 
@@ -145,7 +140,7 @@ def get_from_queue(queue_name,xqueue_session):
     """
     try:
         success, response = util._http_get(xqueue_session,
-                                           urlparse.urljoin(settings.XQUEUE_INTERFACE['url'], project_urls.XqueueURLs.get_submission),
+                                           urlparse.urljoin(auth.XQUEUE_INTERFACE['url'], project_urls.XqueueURLs.get_submission),
                                            {'queue_name': queue_name})
     except Exception as err:
         return False, "Error getting response: {0}".format(err)
@@ -160,7 +155,7 @@ def get_queue_length(queue_name,xqueue_session):
     """
     try:
         success, response = util._http_get(xqueue_session,
-                                           urlparse.urljoin(settings.XQUEUE_INTERFACE['url'], project_urls.XqueueURLs.get_queuelen),
+                                           urlparse.urljoin(auth.XQUEUE_INTERFACE['url'], project_urls.XqueueURLs.get_queuelen),
                                            {'queue_name': queue_name})
         
         if not success:
