@@ -23,6 +23,7 @@ def each_cycle():
     print('[*]Logging in to xqueue')
     try:
         session = util.xqueue_login()
+        print(session)
     except Exception as ex:
         print('Error: Unable to log into XQueue:', ex)
         return
@@ -159,7 +160,6 @@ def get_queue_length(queue_name,xqueue_session):
                                            {'queue_name': queue_name})
         
         if not success:
-            print(success, response)
             return False,"Invalid return code in reply"
     
     except Exception as e:
