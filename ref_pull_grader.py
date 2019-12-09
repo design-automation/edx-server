@@ -159,6 +159,7 @@ def get_queue_length(queue_name,xqueue_session):
                                            {'queue_name': queue_name})
         
         if not success:
+            print(success, response)
             return False,"Invalid return code in reply"
     
     except Exception as e:
