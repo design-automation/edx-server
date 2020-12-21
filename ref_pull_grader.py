@@ -67,7 +67,7 @@ def grade(content):
     for (filename, fileurl) in files.iteritems():
         try:
             result = lambda_client.invoke(
-                FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader',
+                FunctionName='arn:aws:lambda:us-east-1:114056409474:function:Mobius_edx_Grader_0_7',
                 InvocationType='RequestResponse',
                 LogType = 'None',
                 Payload = json.dumps({ "file" : fileurl, "question" : question, "info": student_info})

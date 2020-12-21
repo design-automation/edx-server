@@ -13,6 +13,7 @@ The few changes made are in ref_pull_grader.py ("each_cycle" and "grade" functio
 3. navigate to ~mobius_server/edx-server.
 4. `git pull` to update the project on the EC2 server.
 5. `pip install <missing packages>` if there are new packages installed.
+6. If there is a new queue for edx, update the `auth.py` file with the edx queue credentials using `vim auth.py`
 
 ### Run the server
 
