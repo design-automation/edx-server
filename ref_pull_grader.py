@@ -23,7 +23,6 @@ def each_cycle():
     print('[*]Logging in to xqueue')
     try:
         session = util.xqueue_login()
-        print(session)
     except Exception as ex:
         print('Error: Unable to log into XQueue:', ex)
         return
