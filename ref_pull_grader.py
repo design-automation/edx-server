@@ -20,7 +20,7 @@ QUEUE_NAME = auth.XQUEUE_INTERFACE['queue_name']
 LAMBDA_URL = project_urls.LAMBDA_URL
 
 def each_cycle():
-    print('[*]Logging in to xqueue')
+    print('[*]Logging in to xqueue: ', QUEUE_NAME)
     try:
         session = util.xqueue_login()
     except Exception as ex:
