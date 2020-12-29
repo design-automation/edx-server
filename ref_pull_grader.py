@@ -16,7 +16,7 @@ import traceback
 
 log = logging.getLogger(__name__)
 
-QUEUE_NAME = settings.QUEUE_NAME
+QUEUE_NAME = auth.XQUEUE_INTERFACE['queue_name']
 LAMBDA_URL = project_urls.LAMBDA_URL
 
 def each_cycle():

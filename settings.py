@@ -5,5 +5,3 @@ IAM = {
 }
 
 REQUESTS_TIMEOUT = 60    # seconds
-
-QUEUE_NAME = 'spatial_computational_thinking'
