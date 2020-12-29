@@ -20,7 +20,7 @@ def xqueue_login():
                                   auth.XQUEUE_INTERFACE['django_auth']['username'],
                                   auth.XQUEUE_INTERFACE['django_auth']['password'],
                                   )
-    print(success, xqueue_msg)
+    print('success status: '+ str(success) + ', xqueue msg: ' + str(xqueue_msg))
     
     return session
 
