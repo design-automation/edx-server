@@ -65,7 +65,6 @@ def grade(content):
     lambda_client = boto3.client('lambda', region_name='us-east-1')
     for (filename, fileurl) in files.iteritems():
         try:
-            console.log('invoking:', LAMBDA_URL)
             result = lambda_client.invoke(
                 FunctionName=LAMBDA_URL,
                 InvocationType='RequestResponse',
